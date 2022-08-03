@@ -1,0 +1,35 @@
+{
+  "name": "prueba",
+  "version": "1.0.0",
+  "description": "",
+  "main": "./src/index.js",
+  "scripts": {
+    "start": "nodemon ./src/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "async": "^3.2.4",
+    "bcrypt": "^5.0.1",
+    "body-parser": "^1.20.0",
+    "chalk": "4.1.2",
+    "config": "^3.3.7",
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.1",
+    "express": "^4.18.1",
+    "joi": "^17.6.0",
+    "jsonwebtoken": "^8.5.1",
+    "meteor-promise": "^0.9.0",
+    "multer": "^1.4.5-lts.1",
+    "mysql2": "^2.3.3",
+    "redis": "^4.2.0",
+    "sequelize": "^6.21.3",
+    "sharp": "^0.30.7"
+  },
+  "devDependencies": {
+    "kill-port": "^2.0.1",
+    "nodemon": "^2.0.19"
+  }
+}
