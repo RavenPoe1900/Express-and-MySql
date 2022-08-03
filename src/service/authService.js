@@ -1,5 +1,5 @@
-const service = require('../utils/genericService.js');
-const personController = new service('person', (params)=>{return false;});
+const Service = require('./genericService.js');
+const personController = new Service('person', (params)=>{return false;});
 
 module.exports = async (req, userName)=>{
     const module = personController.module(req);

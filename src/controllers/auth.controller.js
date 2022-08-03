@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const authService = require('../utils/authService.js');
+const AuthService = require('../service/authService.js');
 const { comparePassword } = require('../utils/functions.js');
 const JWT_SECRET_KEY = require('../../config/config.js').JWT_SECRET_KEY;
 const JWT_SECRET_KEY_EXPIRES = require('../../config/config.js').JWT_SECRET_KEY_EXPIRES;
@@ -7,7 +7,7 @@ const JWT_SECRET_KEY_EXPIRES = require('../../config/config.js').JWT_SECRET_KEY_
 
 
 const register = async (req, res) => {
-  const consult = await authService(req, req.body.userName);
+  const consult = await AuthService(req.app.locals.models, req.body.userName);
   if(consult.error) return res.status(consult.http).send(consult.error);
   const equal = await comparePassword(req.body.password, consult.password);
   if(equal){

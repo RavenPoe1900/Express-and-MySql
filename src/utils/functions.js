@@ -29,13 +29,13 @@ function removeFile(path){
   }
 }
 
-async function idValidation({req, data, models, idNames}){
+async function idValidation({models, body, modelsName, idNames}){
   let ids = [];
   idNames.forEach(element => {
-    ids.push(data[element])
+    ids.push(body[element])
   }); 
   for (let index = 0; index < models.length; index++) {
-    const model = req.app.locals.models[models[index]];
+    const model = models[modelsName[index]];
     const find = await model.findByPk(ids[index]);
     if(!find) return true    
   }

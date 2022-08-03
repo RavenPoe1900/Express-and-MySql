@@ -1,12 +1,12 @@
 const controller = require('./genericController.js');
-const send = require('../utils/functions.js').send;
+const send = require('../../utils/functions.js').send;
 
 class personController extends controller {
     constructor(service){
         super(service);
     }
     async imageUpload(req, res){
-        const imageUpload = await this.service.imageUpload(req, req.params.id, req.file);
+        const imageUpload = await this.service.imageUpload(req.app.locals.models, req.params.id, req.file);
         send(res, imageUpload);
     };
 

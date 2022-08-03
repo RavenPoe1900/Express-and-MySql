@@ -1,41 +1,44 @@
-class genericController{
+const AbstractService = require('./abstractService.js');
+
+class GenericController extends AbstractService{
     constructor(moduleName, validationFunction, modelsValidate = null, idNames = null){
+        super();
         this.moduleName = moduleName;
         this.validationFunction = validationFunction;
         this.modelsValidate = modelsValidate;
         this.idNames = idNames;
     }
 
-    module(req){
-        return req.app.locals.models[this.moduleName];
+    module(models){
+        return models[this.moduleName];
     }
 
-    validationVariables(req, data){
+    validationVariables(models, body){
         return {
-            req: req,
-            data: data,
-            models: this.modelsValidate,
+            models: models,
+            body: body,
+            modelsName: this.modelsValidate,
             idNames: this.idNames,
         }
     }
 
-    async validationId(req, data, operation, config = null){
-        const validation = await this.validationFunction(this.validationVariables(req, data))
+    async validationId(models, body, operation, config = null){
+        const validation = await this.validationFunction(this.validationVariables(models, body))
         if(validation){
            return {
                 http:404,
                 error: `Validation property error`
             };;  
         }
-        return operation(req, config);
+        return operation(models, config);
     }
 
-    async findAndOperation(req, data, id, response, operation, message){
-        const module = this.module(req);
+    async findAndOperation(models, body, id, response, operation, message){
+        const module = this.module(models);
         try{
             let consult = await module.findByPk(Number(id));;
             if (consult) {        
-                await consult[operation](data);
+                await consult[operation](body);
                 return response(consult);
             } else {
                 return {
@@ -52,28 +55,28 @@ class genericController{
         }   
     }
 
-    async pagination(req, data,config){   
-        const page = (data.page - 1) * data.size;
+    async pagination(models, body,config){   
+        const page = (body.page - 1) * body.size;
         const paginationConfig = {
-            limit: data.size,
+            limit: body.size,
             offset: page,
          } 
-        config = Object.assign({}, paginationConfig, config)    
-        const module = this.module(req);
+        const configuration = Object.assign({}, paginationConfig, config)    
+        const module = this.module(models);
         try{
-            const {count, rows} = await module.findAndCountAll(config);
-            const pages = Math.ceil(count / data.size);
-            const nextPage = data.page + 1 > pages? pages : data.page + 1;
+            const {count, rows} = await module.findAndCountAll(configuration);
+            const pages = Math.ceil(count / body.size);
+            const nextPage = body.page + 1 > pages? pages : body.page + 1;
 
             return {
                 rows,
                 meta:{
-                    page: data.page,
-                    page_size: data.size,
+                    page: body.page,
+                    page_size: body.size,
                     total: count,
                     pages: pages,
                     next_page: nextPage, 
-                    prev_page: data.page - 1 > 1 ? nextPage - 1 : 1,
+                    prev_page: body.page - 1 > 1 ? nextPage - 1 : 1,
                 }
             };
         }catch(err){
@@ -84,8 +87,8 @@ class genericController{
         }
     };
     
-    async getOne(req, id, config={}){
-        const module = this.module(req);
+    async getOne(models, id, config={}){
+        const module = this.module(models);
         try{
             const consult = await module.findByPk(Number(id), config);
             if (consult) return consult;
@@ -104,11 +107,11 @@ class genericController{
         
     };
 
-    create(req, data, config) {
-        const operation = async (req, config) =>{
-            const module = this.module(req);
+    create(models, body, config) {
+        const operation = async (models, config) =>{
+            const module = this.module(models);
             try{                
-                const consult = await module.create(data,{
+                const consult = await module.create(body,{
                         config
                     });
                 return{
@@ -121,29 +124,29 @@ class genericController{
                 };
             }   
         };   
-        return this.validationId(req, data, operation, config);
+        return this.validationId(models, body, operation, config);
     };
     
-    update(req, data, id){
-        const operation = (req) =>{
-            const response = (data)=>{
+    update(models, body, id){
+        const operation = (models) =>{
+            const response = (body)=>{
                 return{
-                    data,
+                    body,
                 };
             };
-            return this.findAndOperation(req, data, id, response, "update", "updating"); 
+            return this.findAndOperation(models, body, id, response, "update", "updating"); 
         } 
-        return this.validationId(req, data, operation);
+        return this.validationId(models, body, operation);
     };
 
-    remove(req, id){
-        const response = (data)=>{
+    remove(models, id){
+        const response = (body)=>{
             return{
                 message: `successfully removed`
             };
         };
-        return this.findAndOperation(req, null, id, response, "destroy", "deleting");
+        return this.findAndOperation(models, null, id, response, "destroy", "deleting");
     };
 }
 
-module.exports = genericController;
+module.exports = GenericController;

@@ -1,21 +1,21 @@
 const validationFunction = require('../utils/functions.js').idValidation;
-const service = require('../utils/genericService.js');
-const petController = new service('pet',validationFunction,
+const Service = require('./genericService.js');
+const petController = new Service('pet',validationFunction,
 							['breed','person'],['BreedId','OwnerId']);
-const personController = new service('person', (params)=>{return false;});
-const animalController = new service('animal',validationFunction,
+const personController = new Service('person', (params)=>{return false;});
+const animalController = new Service('animal',validationFunction,
 							['breed','shop'],['BreedId','ShopId']);
 
 class PurchaseService{
     
-    async init(req, data){
-        let id = data.OwnerId;
-        const person = 	await personController.getOne(req, id);
+    async init(models, body){
+        let id = body.OwnerId;
+        const person = 	await personController.getOne(models, id);
         if(person.error) return person;
-        id = data.AnimalId;
-        const animal = await animalController.getOne(req, id);
+        id = body.AnimalId;
+        const animal = await animalController.getOne(models, id);
         if(animal.error) return animal;       
-        if(animal.ShopId != data.ShopId)
+        if(animal.ShopId != body.ShopId)
             return {
                 error:'Shop id does not match animal shop id.',
                 http:404
@@ -31,14 +31,14 @@ class PurchaseService{
             "price": animal.price,
             "amount": animal.amount - 1,
         }
-        const update = await animalController.update(req, animalData, id);
+        const update = await animalController.update(models, animalData, id);
         if(update.error) return update;
         const petData = {
-            "name": data.name,
+            "name": body.name,
             "BreedId": animal.BreedId,
-            "OwnerId": data.OwnerId
+            "OwnerId": body.OwnerId
         }
-        const create = await petController.create(req, petData);
+        const create = await petController.create(models, petData);
         return create;
     }
 }

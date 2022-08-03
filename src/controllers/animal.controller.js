@@ -1,6 +1,6 @@
-const GenericController = require('../utils/genericController.js');
+const GenericController = require('./utils/genericController.js');
 const validationFunction = require('../utils/functions.js').idValidation;
-const Service = require('../utils/genericService.js')
+const Service = require('../service/genericService.js')
 
 const animalService = new Service('animal',validationFunction,	
 								['breed','shop'],['BreedId','ShopId']);
@@ -16,7 +16,7 @@ const config = (req) =>{
 };
 
 const pagination = (req, res) => {
-	return controller.pagination(req,res, config(req));	
+	return controller.pagination(req, res, config(req));	
 };
 
 const getOne = (req, res) => {

@@ -1,8 +1,8 @@
-const genericController = require('../utils/genericController.js');
-const service = require('../utils/genericService.js');
+const GenericController = require('./utils/genericController.js');
+const Service = require('../service/genericService.js');
 
-const shopService = new service('shop', (params)=>{return false;})
-const controller = new genericController(shopService);
+const shopService = new Service('shop', (params)=>{return false;})
+const controller = new GenericController(shopService);
 
 
 const pagination = (req, res) => {

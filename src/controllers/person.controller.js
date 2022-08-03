@@ -1,9 +1,9 @@
-const personController = require('../utils/personController.js');
+const PersonController = require('./utils/personController.js');
 const hashPassword = require('../utils/functions.js').hashPassword;
-const service = require('../utils/personService.js');
+const Service = require('../service/personService.js');
 
-const personService = new service('person', (params)=>{return false;});
-const controller = new personController(personService);
+const personService = new Service('person', (params)=>{return false;});
+const controller = new PersonController(personService);
 
 
 const pagination = (req, res) => {

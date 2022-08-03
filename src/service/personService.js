@@ -1,17 +1,17 @@
-const service = require('./genericService.js');
+const Service = require('./genericService.js');
 const fs = require('fs');
 const path = require('path');
 const ResizeAndWrite = require('../utils/resizeAndWrite.js');
 const removeFile = require('../utils/functions.js').removeFile;
 
 
-class personService extends service{
+class PersonService extends Service{
 	constructor(moduleName, validationFunction, modelsValidate = null, idNames = null){
 		super(moduleName, validationFunction, modelsValidate, idNames);
 	}
 
-	async remove(req, id){
-       const remove = await super.remove(req, id);
+	async remove(models, id){
+       const remove = await super.remove(models, id);
 	   if(remove.error) return remove;
 	   const dir = `${path.resolve(__dirname,'../../')}/uploads/${id}.png`;
 	   const removeF = removeFile(dir);
@@ -19,10 +19,10 @@ class personService extends service{
 	   return remove;
     };
 
-	async imageUpload(req,id,file) {
-		const module = this.module(req);
-		const data = await module.findByPk(Number(id));
-		if(data===null) return {
+	async imageUpload(models,id,file) {
+		const module = this.module(models);
+		const consult = await module.findByPk(Number(id));
+		if(consult === null) return {
 			http:404,  
 			error: `Cannot find id=${id}.`
 		  };
@@ -53,4 +53,4 @@ class personService extends service{
 		  };		
 	};
 }
-module.exports = personService;
+module.exports = PersonService;

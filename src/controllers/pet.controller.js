@@ -1,10 +1,10 @@
-const genericController = require('../utils/genericController.js');
+const GenericController = require('./utils/genericController.js');
 const validationFunction = require('../utils/functions.js').idValidation;
-const service = require('../utils/genericService.js');
+const Service = require('../service/genericService.js');
 
-const petService = new service('pet',validationFunction,
+const petService = new Service('pet',validationFunction,
 								['breed','person'],['BreedId','OwnerId']);
-const controller = new genericController(petService);							
+const controller = new GenericController(petService);							
 
 const config = (req) =>{
 	const person = req.app.locals.models['person'];
