@@ -19,17 +19,25 @@ const CONFIG_DEVELOPMENT_DB = {
     }
 }
 
-const JWT_SECRET = {
+const REDIS= {
+    password :process.env.REDISPASSWORD,
+};
+
+const JWT = {
     key: process.env.JWT_SECRET_KEY,
     expires : process.env.JWT_SECRET_KEY_EXPIRES,
+}
+const REFRESHJWT = {
+    refreshKey: process.env.REFRESH_JWT_SECRET_KEY,
+    refreshExpires : process.env.REFRESH_JWT_SECRET_KEY_EXPIRES,
 }
 
 module.exports =  {    
     PORT,
     CONFIG_DEVELOPMENT_DB,   
-    JWT_SECRET,
+    JWT,
+    REFRESHJWT,
     URL:'/api',
     NODE_ENV: process.env.NODE_ENV,
-    JWT_SECRET_KEY: process.env.JWT_SECRET_KEY,
-    JWT_SECRET_KEY_EXPIRES: process.env.JWT_SECRET_KEY_EXPIRES,
+    REDIS
 }

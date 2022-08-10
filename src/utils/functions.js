@@ -1,5 +1,6 @@
 const fs = require('fs');
-const bcrypt = require("bcrypt")
+const bcrypt = require("bcrypt");
+const jwt = require('jsonwebtoken');
 
 const validationError =(res, next, error)=>{
   if (error == null)return next(); 
@@ -57,6 +58,17 @@ function send(res, data){
   else res.send(data);
 }
 
+function createOrRefreshToken(id, userName, key, expires){
+  const token = jwt.sign(
+    { userId: id, userName: userName},
+    key,
+    {
+      expiresIn: expires,
+    }
+  ); 
+  return token;
+}
+
 module.exports = {
   validationError, 
   fileExists, 
@@ -65,5 +77,6 @@ module.exports = {
   comparePassword,
   send,
   removeFile,
+  createOrRefreshToken,
 };
 

@@ -7,5 +7,4 @@ module.exports = Joi.object().keys(
         name: joiName,
         userName: joiName,
         password: joiPassword,
-        photo: Joi.string().required(),
     }) ;

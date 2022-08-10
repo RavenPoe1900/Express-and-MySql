@@ -12,10 +12,16 @@ const Service = require('../service/personService.js');
 const personService = new Service('person', (params)=>{return false;});
 const controller = new PersonController(personService);
 
+const config = (models) =>{
+	return {
+		// attributes: ['id', 'name', 'username'],
+	}
+};
+
 const personRouters = Router();
 
-personRouters.get("/",validationBody(paginate), controller.pagination());
-personRouters.get("/:id",validationParam(id), controller.getOne());
+personRouters.get("/",validationBody(paginate), controller.pagination(config));
+personRouters.get("/:id",validationParam(id), controller.getOne(config));
 personRouters.post("/", validationBody(person), reqPasswordHash(), controller.create());
 personRouters.put("/:id", validationParam(id), validationBody(person),reqPasswordHash(), controller.update());
 personRouters.delete("/:id", validationParam(id), controller.remove());

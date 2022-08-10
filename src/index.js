@@ -1,7 +1,8 @@
 const express = require('express');
 const app = express();
-const Db = require('./utils/connect');
+const Db = require('./utils/connect.js');
 const db = new Db();
+const RedisClient = require('./utils/redis.js');
 const cors = require('cors');
 const {logger, printEndpoints} = require('./utils/logger.js');
 const cookieParser = require('cookie-parser');
@@ -40,7 +41,9 @@ app.use('/api/auth',authRouter);
 
 async function init(){
     printEndpoints(app._router, false);
+    app.locals.redisClient = await RedisClient.connect();    
     await db.sync();
+    console.log("prueba")
     app.listen(port,()=>{
         logger(`Server is running in port:${port}`);    
     })

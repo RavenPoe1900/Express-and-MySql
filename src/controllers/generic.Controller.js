@@ -9,9 +9,9 @@ class genericController{
         const service = this.service;
         return async function (req, res){
             const garbageCollector = service;
-            if(config) config = config(req.app.locals.models);
+            const myConfig = config ? config(req.app.locals.models): config;
             const paginationService = await garbageCollector.pagination(req.app.locals.models,
-                                                                         req.body, config)
+                                                                         req.body, myConfig)
             send(res,paginationService);
         }
     };
@@ -20,8 +20,8 @@ class genericController{
         const service = this.service;
         return async function (req, res){
             const garbageCollector = service;
-            if(config) config = config(req.app.locals.models);
-            const getOne = await garbageCollector.getOne(req.app.locals.models, req.params.id, config);
+            const myConfig = config ? config(req.app.locals.models): config;
+            const getOne = await garbageCollector.getOne(req.app.locals.models, req.params.id, myConfig);
             send(res, getOne); 
         }
                
@@ -31,8 +31,8 @@ class genericController{
         const service = this.service;
         return async function (req, res){
             const garbageCollector = service;
-            if(config) config = config(req.app.locals.models);
-            const create = await garbageCollector.create(req.app.locals.models, req.body, config);
+            const myConfig = config ? config(req.app.locals.models): config;
+            const create = await garbageCollector.create(req.app.locals.models, req.body, myConfig);
             send(res, create);
         }
         

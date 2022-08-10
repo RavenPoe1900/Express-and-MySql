@@ -1,8 +1,9 @@
 const Service = require('./genericService.js');
-const personController = new Service('person', (params)=>{return false;});
+const personService = new Service('person', (params)=>{return false;});
+class AuthService{
 
-module.exports = async (req, userName)=>{
-    const module = personController.module(req);
+  async findByUserName (models, userName){
+    const module = personService.module(models);
     try{
         const consult = await module.findOne({
             where: {
@@ -22,4 +23,11 @@ module.exports = async (req, userName)=>{
             error: err.message || `Some error occurred while getOne the ${this.moduleName}.`
         };
     }
+  }
+
+  updatePerson(person, id, models){
+    return personService.update(models, person, id);
+  }
 }
+
+module.exports = AuthService;
