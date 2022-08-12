@@ -1,6 +1,8 @@
 const fs = require('fs');
 const bcrypt = require("bcrypt");
 const jwt = require('jsonwebtoken');
+const CustomError = require('./customError.js');
+require('express-async-errors');
 
 const validationError =(res, next, error)=>{
   if (error == null)return next(); 
@@ -10,7 +12,7 @@ const validationError =(res, next, error)=>{
       message = details.map(i => i.message).join(',');
   if( error.message)
       message += error.message;
-  res.status(422).json({ error: message })
+  throw new CustomError(message, 404);
 };
 
 function fileExists(path) {
@@ -54,7 +56,7 @@ async function comparePassword(plaintextPassword, hash) {
 }
 
 function send(res, data){
-  if (data.error) res.status(data.http).send(data.error);
+  if (data.error) new CustomError(data.error, data.http);
   else res.send(data);
 }
 

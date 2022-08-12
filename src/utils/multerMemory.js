@@ -3,7 +3,7 @@ const image = require('../schemas/image.schema.js');
 
 const storageImage = multer.memoryStorage({})
 
-const maxSize = 2000 * 1000 * 1000;
+const maxSize = 5000 * 1000;
    
 module.exports = multer({ 
 					fileFilter: (req, file, cb) => {

@@ -1,5 +1,6 @@
 const controller = require('./generic.Controller.js');
 const send = require('../utils/functions.js').send;
+require('express-async-errors');
 
 class personController extends controller {
     constructor(service){
@@ -20,7 +21,7 @@ class personController extends controller {
         return async function (req, res){
             const garbageCollector = service;
             const path = await garbageCollector.imageDownload(req.params.id);
-            if(path.error) return res.status(path.http).send(path.error);
+            if(path.error) throw new CustomError(path.error, path.http);
             res.sendFile(path);
         }       
     }

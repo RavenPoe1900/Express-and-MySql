@@ -4,10 +4,11 @@ const {key, expires} = require('../../config/config.js').JWT;
 const {refreshKey, refreshExpires} = require('../../config/config.js').REFRESHJWT;
 const jwt = require('jsonwebtoken');
 const authService = new AuthService();
+require('express-async-errors');
 
 const login = async (req, res) => {
   let consult = await authService.findByUserName(req.app.locals.models, req.body.userName);
-  if(consult.error) return res.status(consult.http).send(consult.error);
+  if(consult.error) throw new CustomError(consult.error, consult.http);
   const equal = await comparePassword(req.body.password, consult.password);
   if(equal){
     const token = createOrRefreshToken(consult.id, consult.userName, key, expires);
@@ -18,10 +19,10 @@ const login = async (req, res) => {
       refreshToken: createOrRefreshToken(consult.id, consult.userName, refreshKey, refreshExpires)
     }
     consult = await authService.updatePerson(person, consult.id, req.app.locals.models)
-    if(consult.error) return res.status(consult.http).send(consult.error);
+    if(consult.error) throw new CustomError(consult.error, consult.http);
     res.cookie('jwt', token, { httpOnly: true, secure: false });
     res.send('Register success'); 
-  } else res.status(404).send('The password not mach')
+  } else throw new CustomError('The password not mach.', 404);
 };
 
 const logout = async (req, res) => {

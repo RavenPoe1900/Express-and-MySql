@@ -23,8 +23,7 @@ class genericController{
             const myConfig = config ? config(req.app.locals.models): config;
             const getOne = await garbageCollector.getOne(req.app.locals.models, req.params.id, myConfig);
             send(res, getOne); 
-        }
-               
+        }               
     };
 
     create(config = null) {
@@ -34,8 +33,7 @@ class genericController{
             const myConfig = config ? config(req.app.locals.models): config;
             const create = await garbageCollector.create(req.app.locals.models, req.body, myConfig);
             send(res, create);
-        }
-        
+        }        
     };
     
     update(){
