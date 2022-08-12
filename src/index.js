@@ -14,7 +14,7 @@ const petRouter = require('./routes/pet.route.js');
 const shopRouter = require('./routes/shop.route.js');
 const animalRouter = require('./routes/animal.route.js');
 const purchaseRouter = require('./routes/purchase.route.js');
-const errorHandler = require('./middlewares/handleError.middleware.js');
+const errorHandler = require('./middlewares/errorHandle.middleware.js');
 const authRouter = require('./routes/auth.route.js');
 
 
