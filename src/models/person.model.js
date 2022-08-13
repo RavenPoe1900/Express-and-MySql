@@ -1,5 +1,6 @@
+const role = require("./role.model.js");
 module.exports = (sequelize, Sequelize) => {
-	return sequelize.define(
+	const person = sequelize.define(
 		"Person",
 	{
 		id: {
@@ -32,4 +33,7 @@ module.exports = (sequelize, Sequelize) => {
 		],
 	 }
 	);
+	role(sequelize, Sequelize).hasMany(person);
+	person.belongsTo(role(sequelize, Sequelize));
+	return person;
 }

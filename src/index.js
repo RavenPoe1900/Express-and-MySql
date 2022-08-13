@@ -16,6 +16,8 @@ const animalRouter = require('./routes/animal.route.js');
 const purchaseRouter = require('./routes/purchase.route.js');
 const errorHandler = require('./middlewares/errorHandle.middleware.js');
 const authRouter = require('./routes/auth.route.js');
+const permissionRouter = require('./routes/permission.route.js');
+const roleRouter = require('./routes/role.route.js');
 
 
 const port =  config.PORT||3000;
@@ -38,6 +40,9 @@ app.use('/api/shop',shopRouter);
 app.use('/api/animal',animalRouter);
 app.use('/api/purchase',purchaseRouter);
 app.use('/api/auth',authRouter);
+app.use('/api/permission',permissionRouter);
+app.use('/api/role',roleRouter);
+
 
 app.use(errorHandler);
 

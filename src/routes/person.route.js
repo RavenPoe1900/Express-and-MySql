@@ -9,12 +9,23 @@ const printEndpoints = require('../utils/logger.js').printEndpoints;
 const upload = require('../utils/multerMemory.js');
 const PersonController = require('../controllers/person.Controller.js');
 const Service = require('../service/personService.js');
-const personService = new Service('person', (params)=>{return false;});
+const validationFunction = require('../utils/functions.js').idValidation;
+
+const personService = new Service('person', validationFunction,
+								['role'],['RoleId']);
 const controller = new PersonController(personService);
 
 const config = (models) =>{
+	const role = models['role'];
+	const permission = models['permission'];
+
 	return {
-		// attributes: ['id', 'name', 'username'],
+		include: [{
+			model:role,
+			include:[{model:permission}],
+			attributes:['id', 'name'],
+		}],
+		attributes: ['id', 'name'],
 	}
 };
 

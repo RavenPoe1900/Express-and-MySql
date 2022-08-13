@@ -114,9 +114,7 @@ class GenericController extends AbstractService{
                 const consult = await module.create(body,{
                         config
                     });
-                return{
-                    consult,
-                };
+                return consult;
             }catch(err){                
                 return{
                     http:500,
@@ -130,9 +128,7 @@ class GenericController extends AbstractService{
     update(models, body, id){
         const operation = (models) =>{
             const response = (body)=>{
-                return{
-                    body,
-                };
+                return body;
             };
             return this.findAndOperation(models, body, id, response, "update", "updating"); 
         } 

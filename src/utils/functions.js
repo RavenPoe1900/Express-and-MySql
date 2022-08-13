@@ -56,7 +56,7 @@ async function comparePassword(plaintextPassword, hash) {
 }
 
 function send(res, data){
-  if (data.error) new CustomError(data.error, data.http);
+  if (data.error)throw new CustomError(data.error, data.http);
   else res.send(data);
 }
 

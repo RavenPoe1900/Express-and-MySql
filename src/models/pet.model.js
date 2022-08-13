@@ -1,5 +1,5 @@
-const person = require("../models/person.model");
-const breed = require("../models/breed.model");
+const person = require("./person.model");
+const breed = require("./breed.model");
 
 module.exports = (sequelize, Sequelize) => {
 	const pet = sequelize.define(
